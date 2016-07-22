@@ -1,10 +1,10 @@
 // var data;
-function ready() {
-  ajax();
-  setInterval(ajax, 15000);
-};
+//function ready() {
+ajax();
+setInterval(ajax, 15000);
+//};
 
-document.addEventListener("DOMContentLoaded", ready);
+//document.addEventListener("DOMContentLoaded", ready);
 
 function req() {
   console.log('tost');
@@ -19,26 +19,26 @@ function ajax() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
       data = JSON.parse(xhttp.responseText);
       if (data && data._total === 0) {
-        //$("#info").text("OFFLINE");
         document.getElementById("info").innerHTML = "OFFLINE";
         document.getElementsByClassName("content")[0].style.display = 'none';
       } else if (data) {
-        document.getElementById("info").innerHTML = "";
-        document.getElementsByClassName("content")[0].style.display = 'block';
-        document.getElementById("viewers").innerHTML = data.streams[0].viewers;
-        document.getElementById("followers").innerHTML = data.streams[0].channel.followers;
-        document.getElementById("game").innerHTML = data.streams[0].channel.game;
-        document.getElementById("status").innerHTML = data.streams[0].channel.status;
+        updateInfo(data);
       };
     };
   };
-  xhttp.open(
-    "GET",
-    link,
-    true
-  );
+  xhttp.open("GET", link, true);
   xhttp.send();
 }
+
+function updateInfo(data) {
+  document.getElementById("info").innerHTML = "";
+  document.getElementsByClassName("content")[0].style.display = 'block';
+  document.getElementById("viewers").innerHTML = data.streams[0].viewers;
+  document.getElementById("followers").innerHTML = data.streams[0].channel.followers;
+  document.getElementById("game").innerHTML = data.streams[0].channel.game;
+  document.getElementById("status").innerHTML = data.streams[0].channel.status;
+}
+
 
 function request(link) {
   var result;
