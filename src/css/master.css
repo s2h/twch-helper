@@ -1,3 +1,7 @@
 #status {
   color: #bbb;
 }
+
+ul {
+  list-style: none;
+}

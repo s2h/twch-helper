@@ -19,8 +19,8 @@ function ajax() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
       data = JSON.parse(xhttp.responseText);
       if (data && data._total === 0) {
-        document.getElementById("info").innerHTML = "OFFLINE";
-        document.getElementsByClassName("content")[0].style.display = 'none';
+        document.getElementById("info").hidden = false;
+        document.getElementsByClassName("content")[0].hidden = true;
       } else if (data) {
         updateInfo(data);
       };
@@ -31,8 +31,8 @@ function ajax() {
 }
 
 function updateInfo(data) {
-  document.getElementById("info").innerHTML = "";
-  document.getElementsByClassName("content")[0].style.display = 'block';
+  document.getElementById("info").hidden = true;
+  document.getElementsByClassName("content")[0].hidden = false;
   document.getElementById("viewers").innerHTML = data.streams[0].viewers;
   document.getElementById("followers").innerHTML = data.streams[0].channel.followers;
   document.getElementById("game").innerHTML = data.streams[0].channel.game;
