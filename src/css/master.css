@@ -5,3 +5,8 @@
 ul {
   list-style: none;
 }
+
+.chart {
+  max-height: 150px;
+  max-width: 500px;
+}
