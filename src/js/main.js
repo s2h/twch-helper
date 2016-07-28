@@ -23,13 +23,6 @@
                 pointColor: "rgba(220,220,220,1)",
                 pointStrokeColor: "#fff",
                 data: startingChartData
-            }, {
-                label: "trend",
-                fillColor: "rgba(170,170,170,0.2)",
-                strokeColor: "rgba(220,220,220,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                data: [5,10,14]
             }
         ]
       };
