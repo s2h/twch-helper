@@ -23,6 +23,14 @@
                 pointColor: "rgba(220,220,220,1)",
                 pointStrokeColor: "#fff",
                 data: startingChartData
+            },
+            {
+                label: "trend",
+                fillColor: "rgba(200,200,200,0.2)",
+                strokeColor: "rgba(200,200,200,1)",
+                pointColor: "rgba(220,220,220,1)",
+                pointStrokeColor: "#fff",
+                data: startingTrendData
             }
         ]
       };
@@ -34,8 +42,10 @@
   function fillStartingDataForCharts() {
     startingChartData = [];
     startingChartLabels = [];
+    startingTrendData = [];
     for (var i = 0; i < chartColumnsNum; i++ ) {
       startingChartData.push(0);
+      startingTrendData.push(0);
       startingChartLabels.push("");
     }
   }
@@ -44,7 +54,7 @@
     var link = "https://api.twitch.tv/kraken/streams/" + stream;
     ajax(link,
       function (data) {
-        if (data.stream != null) {
+        if (data.stream !== null) {
           foundStream(data);
         } else {
           noStream();
@@ -62,6 +72,17 @@
   function foundStream(data) {
     startingChartData.push(data.stream.viewers);
     startingChartData.shift();
+
+    startingTrendData = [];
+    startingChartData.forEach(function (value, index, array) {
+      var avgSum = 0;
+      for (var i = 0; i<=index; i++) {
+        avgSum += array[i];
+      }
+      avgSum = avgSum / index;
+      startingChartData.push(avgSum);
+    });
+
     myLiveChart.update();
     document.getElementById("info").hidden = true;
     document.getElementsByClassName("content")[0].hidden = false;
@@ -78,11 +99,11 @@
         var data = JSON.parse(xhttp.responseText);
         if (data) {
           success(data);
-          return
+          return;
         }
       }
       fail();
-    }
+    };
     xhttp.open("GET", url, true);
     xhttp.send();
   }
