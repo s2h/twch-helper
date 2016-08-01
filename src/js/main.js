@@ -30,19 +30,11 @@
         ]
       };
 
-  fillStartingDataForCharts();
+  //fillStartingDataForCharts();
 
   myLiveChart = new Chart.Line(ctx, {data: chartParams});
   getStreamInfo();
   setInterval(getStreamInfo, getInfoTimeout);
-
-  function fillStartingDataForCharts() {
-    for (var i = 0; i < chartColumnsNum; i++ ) {
-      chartParams.datasets[0].data.push(0);
-      chartParams.datasets[1].data.push(0);
-      chartParams.labels.push("");
-    }
-  }
 
   function getStreamInfo() {
     var link = "https://api.twitch.tv/kraken/streams/" + stream;
@@ -64,7 +56,7 @@
 
   function foundStream(data) {
     chartParams.datasets[0].data.push(data.stream.viewers);
-    chartParams.datasets[0].data.shift();
+    if (chartParams.datasets[0].data.length >= chartColumnsNum) chartParams.datasets[0].data.shift();
 
     chartParams.datasets[1].data = [];
     chartParams.datasets[0].data.forEach(function (value, index, array) {
