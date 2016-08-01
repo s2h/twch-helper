@@ -1,21 +1,15 @@
-"use strict";
 (function() {
-  var debug = true;
+  var debug = false;
   var chartColumnsNum = 30,
       getInfoTimeout = 60000,
       stream = 'anaxuname';
 
-  var startingChartData,
-      startingTrendData,
-      startingChartLabels,
-      myLiveChart;
-
-  fillStartingDataForCharts();
+  var myLiveChart;
 
   var canvas = document.getElementById('viewers_chart'),
       ctx = canvas.getContext('2d'),
-      startingChartParams = {
-        labels: startingChartLabels,
+      chartParams = {
+        labels: [],
         datasets: [
             {
                 label: "viewers",
@@ -23,7 +17,7 @@
                 strokeColor: "rgba(220,220,220,1)",
                 pointColor: "rgba(220,220,220,1)",
                 pointStrokeColor: "#fff",
-                data: startingChartData
+                data: []
             },
             {
                 label: "trend",
@@ -31,23 +25,22 @@
                 strokeColor: "rgba(200,200,200,1)",
                 pointColor: "rgba(220,220,220,1)",
                 pointStrokeColor: "#fff",
-                data: startingTrendData
+                data: []
             }
         ]
       };
 
-  myLiveChart = new Chart.Line(ctx, {data: startingChartParams});
+  fillStartingDataForCharts();
+
+  myLiveChart = new Chart.Line(ctx, {data: chartParams});
   getStreamInfo();
   setInterval(getStreamInfo, getInfoTimeout);
 
   function fillStartingDataForCharts() {
-    startingChartData = [];
-    startingChartLabels = [];
-    startingTrendData = [];
     for (var i = 0; i < chartColumnsNum; i++ ) {
-      startingChartData.push(0);
-      startingTrendData.push(0);
-      startingChartLabels.push("");
+      chartParams.datasets[0].data.push(0);
+      chartParams.datasets[1].data.push(0);
+      chartParams.labels.push("");
     }
   }
 
@@ -70,20 +63,20 @@
   }
 
   function foundStream(data) {
-    startingChartData.push(data.stream.viewers);
-    startingChartData.shift();
+    chartParams.datasets[0].data.push(data.stream.viewers);
+    chartParams.datasets[0].data.shift();
 
-    startingTrendData = [];
-    startingChartData.forEach(function (value, index, array) {
+    chartParams.datasets[1].data = [];
+    chartParams.datasets[0].data.forEach(function (value, index, array) {
       var avgSum = 0;
       for (var i = 0; i<=index; i++) {
         avgSum += array[i];
       }
       avgSum /= index + 1;
-      startingTrendData.push(avgSum);
+      chartParams.datasets[1].data.push(avgSum);
     });
 
-    consoleOutput(startingChartData, startingTrendData);
+    consoleOutput(chartParams);
 
     myLiveChart.update();
     document.getElementById("info").hidden = true;
