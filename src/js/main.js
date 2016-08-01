@@ -1,6 +1,7 @@
 "use strict";
 (function() {
-  var chartColumnsNum = 60,
+  var debug = true;
+  var chartColumnsNum = 30,
       getInfoTimeout = 60000,
       stream = 'anaxuname';
 
@@ -35,9 +36,9 @@
         ]
       };
 
-  setInterval(getStreamInfo, getInfoTimeout);
   myLiveChart = new Chart.Line(ctx, {data: startingChartParams});
   getStreamInfo();
+  setInterval(getStreamInfo, getInfoTimeout);
 
   function fillStartingDataForCharts() {
     startingChartData = [];
@@ -59,8 +60,7 @@
         } else {
           noStream();
         }
-      },
-      noStream
+      }
     );
   }
 
@@ -79,9 +79,11 @@
       for (var i = 0; i<=index; i++) {
         avgSum += array[i];
       }
-      avgSum = avgSum / index;
-      startingChartData.push(avgSum);
+      avgSum /= index + 1;
+      startingTrendData.push(avgSum);
     });
+
+    consoleOutput(startingChartData, startingTrendData);
 
     myLiveChart.update();
     document.getElementById("info").hidden = true;
@@ -99,12 +101,21 @@
         var data = JSON.parse(xhttp.responseText);
         if (data) {
           success(data);
-          return;
+        } else {
+          fail();
         }
       }
-      fail();
+
     };
     xhttp.open("GET", url, true);
     xhttp.send();
+  }
+
+  function consoleOutput() {
+    if (debug) {
+      for (var i = 0; i < arguments.length; i++) {
+        console.log(arguments[i]);
+      }
+    }
   }
 })();
