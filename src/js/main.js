@@ -30,7 +30,6 @@
         ]
       };
 
-  //fillStartingDataForCharts();
 
   myLiveChart = new Chart.Line(ctx, {data: chartParams});
   getStreamInfo();
@@ -56,7 +55,11 @@
 
   function foundStream(data) {
     chartParams.datasets[0].data.push(data.stream.viewers);
-    if (chartParams.datasets[0].data.length >= chartColumnsNum) chartParams.datasets[0].data.shift();
+    chartParams.labels.push("");
+    if (chartParams.datasets[0].data.length >= chartColumnsNum) {
+      chartParams.datasets[0].data.shift();
+      chartParams.labels.shift();
+    }
 
     chartParams.datasets[1].data = [];
     chartParams.datasets[0].data.forEach(function (value, index, array) {
@@ -67,10 +70,10 @@
       avgSum /= index + 1;
       chartParams.datasets[1].data.push(avgSum);
     });
-
     consoleOutput(chartParams);
 
     myLiveChart.update();
+
     document.getElementById("info").hidden = true;
     document.getElementsByClassName("content")[0].hidden = false;
     document.getElementById("viewers").innerHTML = data.stream.viewers;
