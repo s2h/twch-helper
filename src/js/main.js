@@ -61,8 +61,10 @@
     };
 
     Stream.foundStream = function (data) {
+        var d = new Date();
+        var n = d.toLocaleTimeString();
         Stream.chartParams.datasets[0].data.push(data.stream.viewers);
-        Stream.chartParams.labels.push("");
+        Stream.chartParams.labels.push(n);
         if (Stream.chartParams.datasets[0].data.length >= Stream.chartColumnsNum) {
             Stream.chartParams.datasets[0].data.shift();
             Stream.chartParams.labels.shift();
@@ -160,4 +162,4 @@
 
     Stream.getStreamInfo();
     setInterval(Stream.getStreamInfo, Stream.getInfoTimeout);
-})("Nightblue3");
+})("anaxuname");
